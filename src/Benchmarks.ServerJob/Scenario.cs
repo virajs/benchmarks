@@ -31,5 +31,8 @@ namespace Benchmarks.ServerJob
 
         [ScenarioPath("/responsecaching/plaintext/requestnocache")]
         ResponseCachingPlaintextRequestNoCache,
+
+        [ScenarioPath("/pet/5")]
+        BasicApi,
     }
 }

@@ -20,6 +20,18 @@ namespace BenchmarkDriver
     {
         private static readonly HttpClient _httpClient = new HttpClient();
 
+        private static readonly Dictionary<Scenario, ServerJob> _serverJobs =
+            new Dictionary<Scenario, ServerJob>()
+            {
+                { Scenario.BasicApi, new ServerJob() {
+                    Sources = new Source[]
+                    {
+                        new Source() { Repository = "Performance", RestoreDirectory = "testapp/BasicApi" }
+                    },
+                    RunParameters = "-p Performance/testapp/BasicApi"
+                } }
+            };
+
         private static readonly Dictionary<Scenario, ClientJob> _clientJobs =
             new Dictionary<Scenario, ClientJob>()
             {
@@ -48,6 +60,11 @@ namespace BenchmarkDriver
                     Connections = 256, Threads = 32, Duration = 10, PipelineDepth = 16,
                     Headers = new string[] { "Cache-Control: no-cache" }
                 } },
+                { Scenario.BasicApi, new ClientJob() {
+                    Connections = 256, Threads = 32, Duration = 10, Headers = new string[] {
+                        "Authorization: Bearer {/token?username=writer@example.com}"
+                    }
+                } }
             };
 
         public static int Main(string[] args)
@@ -116,11 +133,13 @@ namespace BenchmarkDriver
                     return 2;
                 }
 
-                var serverJob = new ServerJob()
+                ServerJob serverJob;
+                if (!_serverJobs.TryGetValue(scenario, out serverJob))
                 {
-                    Scheme = scheme,
-                    Scenario = scenario,
-                };
+                    serverJob = new ServerJob();
+                }
+                serverJob.Scheme = scheme;
+                serverJob.Scenario = scenario;
 
                 if (connectionFilterOption.HasValue())
                 {
@@ -143,8 +162,8 @@ namespace BenchmarkDriver
                 }
                 serverJob.Sources = sources;
 
-                // Override default ClientJob settings if options are set
-                if (connectionsOption.HasValue())
+            // Override default ClientJob settings if options are set
+            if (connectionsOption.HasValue())
                 {
                     _clientJobs.Values.ToList().ForEach(c => c.Connections = int.Parse(connectionsOption.Value()));
                 }

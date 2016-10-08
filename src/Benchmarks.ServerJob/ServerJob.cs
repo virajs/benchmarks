@@ -15,6 +15,8 @@ namespace Benchmarks.ServerJob
 
         public string ConnectionFilter { get; set; }
 
+        public string RunParameters { get; set; }
+
         private IEnumerable<Source> _sources;
         public IEnumerable<Source> Sources
         {
