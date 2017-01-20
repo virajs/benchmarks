@@ -15,7 +15,7 @@ function init(args)
 
    local r = {}
    for i = 1, pipelineDepth, 1 do
-      r[i] = wrk.format(nil)
+      r[i] = wrk.format(method)
    end
 
    print("Pipeline depth: " .. pipelineDepth)
