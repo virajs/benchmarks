@@ -29,6 +29,7 @@ k-standard-goals
       "-n MemoryCachePlaintext",
       "-n MemoryCachePlaintextSetRemove",
       "-n ResponseCachingPlaintextCached",
+      "-n ResponseCachingPlaintextCached --method DELETE",
       "-n ResponseCachingPlaintextResponseNoCache",
       "-n ResponseCachingPlaintextRequestNoCache",
       "-n ResponseCachingPlaintextVaryByCached",
