@@ -37,5 +37,8 @@ namespace Benchmarks.ServerJob
 
         [ScenarioPath("/responsecaching/plaintext/varybycached")]
         ResponseCachingPlaintextVaryByCached,
+
+        [ScenarioPath("/responsecaching/plaintext/cached")]
+        ResponseCachingPlaintextUnsafe,
     }
 }

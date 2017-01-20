@@ -55,6 +55,10 @@ namespace BenchmarkDriver
                     Connections = 256, Threads = 32, Duration = 10, PipelineDepth = 16,
                     Headers = new string[] { "Accept: text/plain" }
                 } },
+                { Scenario.ResponseCachingPlaintextUnsafe, new ClientJob() {
+                    Connections = 256, Threads = 32, Duration = 10, PipelineDepth = 16,
+                    Method = "DELETE"
+                } },
             };
 
         public static int Main(string[] args)
@@ -99,6 +103,8 @@ namespace BenchmarkDriver
                 "Number of threads used by client", CommandOptionType.SingleValue);
             var headerOption = app.Option("--header",
                 "Header added to request", CommandOptionType.MultipleValue);
+            var methodOption = app.Option("--method",
+                "HTTP method of the request", CommandOptionType.SingleValue);
 
             app.OnExecute(() =>
             {
@@ -170,6 +176,10 @@ namespace BenchmarkDriver
                 if (headerOption.HasValue())
                 {
                     _clientJobs.Values.ToList().ForEach(c => c.Headers = headerOption.Values.ToArray());
+                }
+                if (methodOption.HasValue())
+                {
+                    _clientJobs.Values.ToList().ForEach(c => c.Method = methodOption.Value());
                 }
 
                 return Run(new Uri(server), new Uri(client), sqlConnectionString, serverJob).Result;

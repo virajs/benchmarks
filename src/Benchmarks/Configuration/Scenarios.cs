@@ -32,6 +32,9 @@ namespace Benchmarks.Configuration
         [ScenarioPath("/responsecaching/plaintext/varybycached")]
         public bool ResponseCachingPlaintextVaryByCached { get; set; }
 
+        [ScenarioPath("/responsecaching/plaintext/cached")]
+        public bool ResponseCachingPlaintextUnsafe { get; set; }
+
         [ScenarioPath("/memorycache/plaintext")]
         public bool MemoryCachePlaintext { get; set; }
 

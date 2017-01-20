@@ -97,7 +97,7 @@ namespace BenchmarkClient
                 if (job != null)
                 {
                     var jobLogText = $"[ID:{job.Id} Connections:{job.Connections} Threads:{job.Threads} " +
-                        $"Duration:{job.Duration} Pipeline:{job.PipelineDepth}";
+                        $"Duration:{job.Duration} Pipeline:{job.PipelineDepth} Method:{job.Method}";
 
                     if (job.Headers != null)
                     {
@@ -151,16 +151,11 @@ namespace BenchmarkClient
                 }
             }
 
-            if (job.PipelineDepth > 0)
-            {
-                command += $" -s scripts/pipeline.lua";
-            }
-
-            command += $" {job.ServerBenchmarkUri}";
+            command += $" -s scripts/pipeline.lua {job.ServerBenchmarkUri} -- {job.Method}";
 
             if (job.PipelineDepth > 0)
             {
-                command += $" -- {job.PipelineDepth}";
+                command += $"{job.PipelineDepth}";
             }
 
             var process = new Process()

@@ -252,7 +252,7 @@ namespace Benchmarks
                 app.UseMemoryCachePlaintextSetRemove();
             }
 
-            if (Scenarios.ResponseCachingPlaintextCached)
+            if (Scenarios.ResponseCachingPlaintextCached || Scenarios.ResponseCachingPlaintextUnsafe)
             {
                 app.UseResponseCachingPlaintextCached();
             }
