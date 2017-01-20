@@ -155,7 +155,7 @@ namespace BenchmarkClient
 
             if (job.PipelineDepth > 0)
             {
-                command += $"{job.PipelineDepth}";
+                command += $" {job.PipelineDepth}";
             }
 
             var process = new Process()
