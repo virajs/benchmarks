@@ -55,10 +55,6 @@ namespace BenchmarkDriver
                     Connections = 256, Threads = 32, Duration = 10, PipelineDepth = 16,
                     Headers = new string[] { "Accept: text/plain" }
                 } },
-                { Scenario.ResponseCachingPlaintextUnsafe, new ClientJob() {
-                    Connections = 256, Threads = 32, Duration = 10, PipelineDepth = 16,
-                    Method = "DELETE"
-                } },
             };
 
         public static int Main(string[] args)
@@ -103,8 +99,8 @@ namespace BenchmarkDriver
                 "Number of threads used by client", CommandOptionType.SingleValue);
             var headerOption = app.Option("--header",
                 "Header added to request", CommandOptionType.MultipleValue);
-            var methodOption = app.Option("--method",
-                "HTTP method of the request", CommandOptionType.SingleValue);
+            var methodOption = app.Option("-p|--method",
+                "HTTP method of the request. Default is GET.", CommandOptionType.SingleValue);
 
             app.OnExecute(() =>
             {
@@ -245,7 +241,7 @@ namespace BenchmarkDriver
                 if (clientJob.State == ClientState.Completed && !string.IsNullOrWhiteSpace(sqlConnectionString))
                 {
                     await WriteResultsToSql(sqlConnectionString, scenario, serverJob.Scheme, serverJob.ConnectionFilter, clientJob.Threads,
-                        clientJob.Connections, clientJob.Duration, clientJob.PipelineDepth, clientJob.Headers, clientJob.RequestsPerSecond);
+                        clientJob.Connections, clientJob.Duration, clientJob.PipelineDepth, clientJob.Headers, clientJob.Method, clientJob.RequestsPerSecond);
                 }
             }
             finally
@@ -354,6 +350,7 @@ namespace BenchmarkDriver
             int duration,
             int? pipelineDepth,
             string[] headers,
+            string method,
             double rps)
         {
             Log("Writing results to SQL...");
@@ -373,6 +370,7 @@ namespace BenchmarkDriver
                         [Duration] [int] NOT NULL,
                         [PipelineDepth] [int] NULL,
                         [Headers] [nvarchar](max) NULL,
+                        [Method] [nvarchar](max) NULL,
                         [RequestsPerSecond] [float] NOT NULL
                     )
                 END
@@ -390,6 +388,7 @@ namespace BenchmarkDriver
                            ,[Duration]
                            ,[PipelineDepth]
                            ,[Headers]
+                           ,[Method]
                            ,[RequestsPerSecond])
                      VALUES
                            (@DateTime
@@ -401,6 +400,7 @@ namespace BenchmarkDriver
                            ,@Duration
                            ,@PipelineDepth
                            ,@Headers
+                           ,@Method
                            ,@RequestsPerSecond)
                 ";
 
@@ -426,6 +426,7 @@ namespace BenchmarkDriver
                     p.AddWithValue("@Duration", duration);
                     p.AddWithValue("@PipelineDepth", (object)pipelineDepth ?? DBNull.Value);
                     p.AddWithValue("@Headers", headers == null ? (object)DBNull.Value : headers.ToContentString());
+                    p.AddWithValue("@Method", method.ToString().ToUpperInvariant());
                     p.AddWithValue("@RequestsPerSecond", rps);
 
                     await command.ExecuteNonQueryAsync();

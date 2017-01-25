@@ -29,10 +29,10 @@ k-standard-goals
       "-n MemoryCachePlaintext",
       "-n MemoryCachePlaintextSetRemove",
       "-n ResponseCachingPlaintextCached",
+      "-n ResponseCachingPlaintextCached -p DELETE",
       "-n ResponseCachingPlaintextResponseNoCache",
       "-n ResponseCachingPlaintextRequestNoCache",
       "-n ResponseCachingPlaintextVaryByCached",
-      "-n ResponseCachingPlaintextUnsafe",
     };
     foreach (var scenario in scenarios) {
       Dotnet(String.Format("-v run -- {0} -s {1} -c {2} {3}", scenario, E("BENCHMARK_SERVER"), E("BENCHMARK_CLIENT"), sql),
