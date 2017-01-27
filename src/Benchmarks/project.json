@@ -4,12 +4,13 @@
     "emitEntryPoint": true,
     "preserveCompilationContext": true,
     "copyToOutput": {
-      "include": [
-        "appsettings.json",
-        "wwwroot",
-        "Views"
-      ]
-    }
+        "include": [
+            "appsettings.json",
+            "wwwroot",
+            "Views"
+        ]
+    },
+    "define": [ "DEBUG" ]
   },
   "dependencies": {
     "Dapper": "1.*",

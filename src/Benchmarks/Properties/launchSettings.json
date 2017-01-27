@@ -22,6 +22,10 @@
       "environmentVariables": {
         "AspNet_Environment": "Development"
       }
+    },
+    "newProfile1": {
+      "executablePath": "C:\\Program Files\\dotnet\\dotnet.exe",
+      "commandLineArgs": ".\\bin\\Release\\netcoreapp1.1\\Benchmarks.dll"
     }
   }
 }
